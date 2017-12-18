@@ -52,7 +52,7 @@ namespace Jose
 
             throw new ArgumentException("RsaKeyManagement algorithm expects key to be of either CngKey, RSACryptoServiceProvider or RSA types.");
 
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_4 || NETSTANDARD2_0
             var publicKey = Ensure.Type<RSA>(key, "RsaKeyManagement alg expects key to be of RSA type.");
 
             var padding = useRsaOaepPadding ? RSAEncryptionPadding.OaepSHA1 :
@@ -97,7 +97,7 @@ namespace Jose
             }
 
             throw new ArgumentException("RsaKeyManagement algorithm expects key to be of either CngKey, RSACryptoServiceProvider or RSA types.");
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_4 || NETSTANDARD2_0
             var privateKey = Ensure.Type<RSA>(key, "RsaKeyManagement algorithm expects key to be of RSA type.");
 
             var padding = useRsaOaepPadding ? RSAEncryptionPadding.OaepSHA1 :

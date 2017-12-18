@@ -39,9 +39,9 @@ namespace Jose
                     }
                 }
             }
-        #elif NETSTANDARD1_4
+#elif NETSTANDARD1_4 || NETSTANDARD2_0
             throw new NotImplementedException("not yet");
-        #endif
+#endif
         }
     }
 }

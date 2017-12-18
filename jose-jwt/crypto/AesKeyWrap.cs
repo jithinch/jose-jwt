@@ -100,7 +100,7 @@ namespace Jose
                     }
                 }
             }
-        #elif NETSTANDARD1_4
+#elif NETSTANDARD1_4 || NETSTANDARD2_0
             using (Aes aes = System.Security.Cryptography.Aes.Create())
             {
                 aes.Key = sharedKey;
@@ -121,7 +121,7 @@ namespace Jose
                     }
                 }
             }
-        #endif
+#endif
         }
 
         private static byte[] AesEnc(byte[] sharedKey, byte[] plainText)
@@ -147,7 +147,7 @@ namespace Jose
                     }
                 }
             }
-        #elif NETSTANDARD1_4
+        #elif NETSTANDARD1_4 || NETSTANDARD2_0
             using (Aes aes = System.Security.Cryptography.Aes.Create())
             {
                 aes.Key = sharedKey;
