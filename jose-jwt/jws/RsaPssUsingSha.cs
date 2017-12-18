@@ -49,7 +49,7 @@ namespace Jose
 
             throw new ArgumentException("RsaUsingSha with PSS padding alg expects key to be of CngKey type.");
 
-#elif NET461
+#elif NET461 || NETSTANDARD2_0
             if (key is CngKey)
             {
                 var privateKey = (CngKey)key;
@@ -88,10 +88,10 @@ namespace Jose
 
             throw new ArgumentException("RsaUsingSha with PSS padding alg expects key to be of either CngKey or RSA types.");
 
-#elif NETSTANDARD1_4 || NETSTANDARD2_0
+#elif NETSTANDARD1_4
             var privateKey = Ensure.Type<RSA>(key, "RsaUsingSha with PSS padding alg expects key to be of RSA type.");
 
-            return privateKey.SignData(securedInput, HashAlgorithm, RSASignaturePadding.Pss);
+            return privateKey.SignData(securedInput, HashAlgorithm, RSASignaturePadding.Pss);            
 #endif
         }
 

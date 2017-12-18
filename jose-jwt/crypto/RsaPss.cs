@@ -8,10 +8,40 @@ namespace Jose
     {
         public static byte[] Sign(byte[] input, CngKey key, CngAlgorithm hash, int saltSize)
         {
+#if NETSTANDARD2_0
+            if (hash == CngAlgorithm.Sha256)
+            {
+                using (var algo = System.Security.Cryptography.SHA256.Create())
+                {
+                    var hashedValue = algo.ComputeHash(input);
+                    return SignHash(hashedValue, key, hash.Algorithm, saltSize);
+                }
+            }
+            else if(hash == CngAlgorithm.Sha384)
+            {
+                using (var algo = System.Security.Cryptography.SHA384.Create())
+                {
+                    var hashedValue = algo.ComputeHash(input);
+                    return SignHash(hashedValue, key, hash.Algorithm, saltSize);
+                }
+            }
+            else if(hash == CngAlgorithm.Sha512)
+            {
+                using (var algo = System.Security.Cryptography.SHA512.Create())
+                {
+                    var hashedValue = algo.ComputeHash(input);
+                    return SignHash(hashedValue, key, hash.Algorithm, saltSize);
+                }
+            }
+
+            throw new ArgumentException(string.Format("RsaPss expects hash function to be SHA256, SHA384 or SHA512, but was given:{0}",hash));
+            
+#else
             using (HashAlgorithm algo = HashAlgorithm(hash))
             {
                 return SignHash(algo.ComputeHash(input), key, hash.Algorithm, saltSize);
             }
+#endif
         }
 
         public static bool Verify(byte[] securedInput, byte[] signature, CngKey key, CngAlgorithm hash, int saltSize)
@@ -62,7 +92,7 @@ namespace Jose
 
         private static HashAlgorithm HashAlgorithm(CngAlgorithm hash)
         {
-        #if NET40 || NET461
+#if NET40 || NET461
             if (hash == CngAlgorithm.Sha256)
                 return new SHA256Cng();
             if (hash == CngAlgorithm.Sha384)
@@ -72,9 +102,9 @@ namespace Jose
             
             throw new ArgumentException(string.Format("RsaPss expects hash function to be SHA256, SHA384 or SHA512, but was given:{0}",hash));
 
-        #elif NETSTANDARD1_4 || NETSTANDARD2_0
+#elif NETSTANDARD1_4 || NETSTANDARD2_0
             throw new NotImplementedException("not yet");
-        #endif
+#endif
         }
     }
 }
